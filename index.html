@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação de Pesquisa - Pecuária de Precisão</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <div class="flex flex-wrap gap-4">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30 overflow-x-hidden">
+
+    <!-- Background Glow Effects -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-900/20 blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-900/20 blur-[120px]"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-6 border-b border-transparent">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center">
+                    <i data-lucide="sprout" class="w-5 h-5 text-slate-950"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-white">Projeto de <span class="text-emerald-400">Pesquisa</span></span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#projeto" class="hover:text-emerald-400 transition-colors">O Desafio</a>
+                <a href="#arquitetura" class="hover:text-emerald-400 transition-colors">Metodologia</a>
+                <a href="#academico" class="hover:text-emerald-400 transition-colors">Contexto Acadêmico</a>
+                <a href="#cronograma" class="hover:text-emerald-400 transition-colors">Cronograma</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 relative z-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Pesquisa em Agro 4.0
+                </div>
+                <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+                    Otimização Produtiva via <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">Inteligência Analítica</span>
+                </h1>
+                <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                    Sistema Integrado de Monitoramento Automatizado e Suporte à Decisão para a Bovinocultura de Corte. O foco é transformar dados zootécnicos brutos em eficiência alimentar e rentabilidade estruturada.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#projeto" class="px-8 py-4 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] flex items-center gap-2">
+                        Entender o Desafio <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#arquitetura" class="px-8 py-4 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all backdrop-blur-sm flex items-center gap-2">
+                        Ver Arquitetura Proposta <i data-lucide="cpu" class="w-5 h-5"></i>
+                    </a>
+                    <a href="Ferramenta/MVP4.HTML" class="px-8 py-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all flex items-center gap-2">
+                        Abrir MVP do Sistema
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Visual - Abstract Data Representation -->
+            <div class="relative h-[400px] lg:h-[500px] w-full rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur-sm overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-blue-500/5"></div>
+                <!-- Grid Pattern -->
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                
+                <!-- Abstract Elements -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4">
+                    <div class="absolute inset-0 border border-emerald-500/20 rounded-full animate-[spin_20s_linear_infinite] border-dashed"></div>
+                    <div class="absolute inset-4 border border-blue-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i data-lucide="nfc" class="w-16 h-16 text-emerald-400 opacity-80"></i>
+                    </div>
+                </div>
+
+                <!-- Floating Data Cards -->
+                <div class="absolute top-8 left-8 bg-slate-950/80 backdrop-blur border border-white/10 p-4 rounded-xl shadow-xl transform transition-transform group-hover:-translate-y-2">
+                    <div class="text-xs text-slate-400 mb-1">Coleta Contínua</div>
+                    <div class="text-lg font-bold text-emerald-400 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4"></i> Monitoramento</div>
+                </div>
+                <div class="absolute bottom-8 right-8 bg-slate-950/80 backdrop-blur border border-white/10 p-4 rounded-xl shadow-xl transform transition-transform group-hover:translate-y-2">
+                    <div class="text-xs text-slate-400 mb-1">Processamento</div>
+                    <div class="text-lg font-bold text-blue-400 flex items-center gap-2"><i data-lucide="database" class="w-4 h-4"></i> Dados em Nuvem</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About/Problem Section -->
+    <section id="projeto" class="py-20 bg-slate-900/30 border-y border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">O Desafio da Pecuária Tradicional</h2>
+                <p class="text-slate-400">A falta de dados contínuos limita o potencial produtivo. A gestão baseada em empirismo resulta em alocação ineficiente de recursos alimentares e perdas econômicas.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center mb-6 border border-white/5">
+                        <i data-lucide="activity" class="w-6 h-6 text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Manejo Estressante</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Pesagens convencionais exigem contenção frequente, impactando negativamente o bem-estar e o desempenho produtivo animal.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center mb-6 border border-white/5">
+                        <i data-lucide="alert-triangle" class="w-6 h-6 text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Decisões Tardias</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">A baixa frequência de dados impede ajustes nutricionais rápidos, inviabilizando a correção de rotas gerenciais durante o ciclo.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center mb-6 border border-white/5">
+                        <i data-lucide="trending-down" class="w-6 h-6 text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Eficiência Comprometida</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Sem o acompanhamento do Ganho Médio Diário (GMD) individual, torna-se impossível otimizar a conversão alimentar no lote.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Architecture Flow -->
+    <section id="arquitetura" class="py-24 px-6 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">Arquitetura da Solução Proposta</h2>
+                <p class="text-slate-400 max-w-2xl">Um fluxo de dados contínuo e automatizado, estabelecendo o ciclo da informação desde a coleta passiva no campo até a geração de indicadores.</p>
+            </div>
+
+            <div class="relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-emerald-500/20 via-blue-500/50 to-emerald-500/20 -translate-y-1/2"></div>
+                
+                <div class="grid lg:grid-cols-5 gap-6">
+                    <!-- Step 1 -->
+                    <div class="relative bg-slate-900 border border-white/10 p-6 rounded-xl flex flex-col items-center text-center z-10 hover:border-emerald-500/50 transition-colors group">
+                        <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-emerald-500 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                            <i data-lucide="nfc" class="w-7 h-7 text-emerald-400"></i>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Identificação RFID</h4>
+                        <p class="text-xs text-slate-400">Brinco eletrônico na orelha para identificação única do animal.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative bg-slate-900 border border-white/10 p-6 rounded-xl flex flex-col items-center text-center z-10 hover:border-emerald-500/50 transition-colors group">
+                        <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-emerald-500 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                            <i data-lucide="scale" class="w-7 h-7 text-emerald-400"></i>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Balança de Passagem</h4>
+                        <p class="text-xs text-slate-400">Pesagem autônoma durante o acesso ao bebedouro.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative bg-slate-900 border border-white/10 p-6 rounded-xl flex flex-col items-center text-center z-10 hover:border-emerald-500/50 transition-colors group">
+                        <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-emerald-500 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                            <i data-lucide="wifi" class="w-7 h-7 text-emerald-400"></i>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Transmissão IoT</h4>
+                        <p class="text-xs text-slate-400">Envio de dados telemétricos via rede sem fio.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative bg-slate-900 border border-white/10 p-6 rounded-xl flex flex-col items-center text-center z-10 hover:border-emerald-500/50 transition-colors group">
+                        <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-emerald-500 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                            <i data-lucide="server" class="w-7 h-7 text-emerald-400"></i>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Cloud Processing</h4>
+                        <p class="text-xs text-slate-400">Armazenamento em nuvem e filtragem de dados inconsistentes.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="relative bg-slate-900 border border-white/10 p-6 rounded-xl flex flex-col items-center text-center z-10 hover:border-emerald-500/50 transition-colors group">
+                        <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-emerald-500 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                            <i data-lucide="bar-chart-3" class="w-7 h-7 text-emerald-400"></i>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Suporte à Decisão</h4>
+                        <p class="text-xs text-slate-400">Geração de indicadores e embasamento para ajuste alimentar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic / Research Context Section -->
+    <section id="academico" class="py-24 bg-slate-900/50 border-y border-white/5 relative overflow-hidden">
+        <!-- Glow detail -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-5xl bg-blue-500/5 blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="graduation-cap" class="w-8 h-8 text-blue-400"></i>
+                        <h2 class="text-3xl font-bold text-white">Pesquisa & Metodologia Científica</h2>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed mb-6">
+                        Este projeto constitui pesquisa em nível de Mestrado pelo <strong class="text-slate-200">Programa de Pós-Graduação em Agronegócios</strong> da Universidade Federal da Grande Dourados (UFGD).
+                    </p>
+                    <p class="text-slate-400 leading-relaxed mb-8">
+                        A metodologia adota um delineamento experimental rigoroso, comparando o manejo convencional com o manejo orientado por dados. O objetivo é avaliar estatisticamente o impacto do sistema sobre as variáveis de Ganho Médio Diário, Eficiência Alimentar e rentabilidade econômica.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500"></i> Delineamento Inteiramente Casualizado (Tratamento Controle x Orientado a Dados)
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500"></i> Análise de Variância (ANOVA)
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500"></i> Validação Prática em Propriedade Comercial de Recria/Terminação
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Institution Badge / Card -->
+                <div class="bg-slate-800/50 p-8 rounded-2xl border border-white/10 backdrop-blur-md relative overflow-hidden shadow-2xl">
+                    <div class="absolute -right-10 -top-10 text-slate-700/30">
+                        <i data-lucide="graduation-cap" class="w-48 h-48"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="text-xs font-bold text-blue-400 tracking-wider uppercase mb-2">Instituição Executora</div>
+                        <h3 class="text-2xl font-bold text-white mb-1">UFGD</h3>
+                        <p class="text-sm text-slate-400 mb-6">Universidade Federal da Grande Dourados<br/>Faculdade de Administração, Ciências Contábeis e Economia</p>
+                        
+                        <div class="space-y-4 pt-6 border-t border-white/10">
+                            <div>
+                                <div class="text-xs text-slate-500 mb-1">Discente Pesquisador</div>
+                                <div class="text-white font-medium">Kevin Luan Rocha Silva</div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-slate-500 mb-1">Comitê de Orientação Sugerido</div>
+                                <div class="text-slate-300 text-sm leading-relaxed">
+                                    Prof. Dr. Davi José Bungenstab<br/>
+                                    Prof.a Dr.a Luciana Ferreira da Silva<br/>
+                                    Prof. Dr. Rodrigo Garofallo Garcia
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="cronograma" class="py-24 px-6 relative">
+        <div class="max-w-7xl mx-auto text-center mb-16">
+            <h2 class="text-3xl font-bold text-white mb-4">Cronograma de Execução (24 Meses)</h2>
+            <p class="text-slate-400">Fases de desenvolvimento do projeto, da concepção metodológica à defesa científica.</p>
+        </div>
+
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-4">
+                <!-- Phase 1 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
+                    <div class="text-emerald-400 text-xs font-bold tracking-widest uppercase mb-1">Fase 1</div>
+                    <div class="text-slate-500 text-xs mb-3 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Meses 1-6</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Planejamento & Setup</h4>
+                    <p class="text-sm text-slate-400">Revisão bibliográfica, planejamento experimental, modelagem e arquitetura sistêmica.</p>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-slate-800 rounded-b-xl overflow-hidden">
+                        <div class="h-full bg-emerald-500 w-full opacity-20"></div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
+                    <div class="text-emerald-400 text-xs font-bold tracking-widest uppercase mb-1">Fase 2</div>
+                    <div class="text-slate-500 text-xs mb-3 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Meses 7-12</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Implantação Prática</h4>
+                    <p class="text-sm text-slate-400">Instalação da balança automatizada, RFID, integração IoT no campo e testes operacionais.</p>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-slate-800 rounded-b-xl overflow-hidden">
+                        <div class="h-full bg-emerald-500 w-full opacity-20"></div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
+                    <div class="text-emerald-400 text-xs font-bold tracking-widest uppercase mb-1">Fase 3</div>
+                    <div class="text-slate-500 text-xs mb-3 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Meses 13-18</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Coleta Automatizada</h4>
+                    <p class="text-sm text-slate-400">Monitoramento contínuo dos dados zootécnicos e aplicação da intervenção experimental.</p>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-slate-800 rounded-b-xl overflow-hidden">
+                        <div class="h-full bg-emerald-500 w-full opacity-20"></div>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
+                    <div class="text-emerald-400 text-xs font-bold tracking-widest uppercase mb-1">Fase 4</div>
+                    <div class="text-slate-500 text-xs mb-3 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Meses 19-24</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Análise e Defesa</h4>
+                    <p class="text-sm text-slate-400">Organização de dados, análise estatística (ANOVA), documentação e defesa científica.</p>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-slate-800 rounded-b-xl overflow-hidden">
+                        <div class="h-full bg-emerald-500 w-full opacity-20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-emerald-500 flex items-center justify-center">
+                    <i data-lucide="sprout" class="w-4 h-4 text-slate-950"></i>
+                </div>
+                <span class="font-bold text-lg text-slate-400">Projeto de Pesquisa</span>
+            </div>
+            
+            <div class="text-center md:text-right">
+                <p class="text-sm text-slate-500">
+                    Apresentação - Mestrado em Agronegócios
+                </p>
+                <p class="text-xs text-slate-600 mt-1">
+                    Pesquisador: Kevin Luan Rocha Silva | UFGD © 2027
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Inicializar os ícones do Lucide
+        lucide.createIcons();
+
+        // Efeito simples de Navbar ao dar scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'border-white/10');
+                navbar.classList.remove('bg-transparent', 'border-transparent');
+            } else {
+                navbar.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'border-white/10');
+                navbar.classList.add('bg-transparent', 'border-transparent');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pecuária Inteligente - ERP Completo (MVP UFGD)</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Reset de Estilos e Fontes Universais */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
+        
+        body { 
+            background-color: #f8fafc; 
+            color: #1e293b; 
+            display: flex; 
+            flex-direction: row; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+        
+        /* Layout Geral e Sidebar */
+        aside { 
+            width: 280px; 
+            background-color: #020617; 
+            color: #cbd5e1; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 20px 15px; 
+            justify-content: space-between;
+            shrink: 0; 
+            z-index: 20; 
+            border-right: 1px solid #1e293b;
+        }
+
+        .brand {
+            padding: 10px 15px 20px 15px;
+            border-b: 1px solid #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .brand h1 { color: #34d399; font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .brand p { color: #64748b; font-size: 11px; margin-top: 4px; font-family: monospace; }
+
+        nav { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
+        
+        .menu-btn { 
+            width: 100%; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 12px 16px; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            border: none; 
+            cursor: pointer; 
+            text-align: left; 
+            background: transparent; 
+            color: #94a3b8; 
+            transition: all 0.2s; 
+        }
+        
+        .menu-btn:hover { background-color: #0f172a; color: #f8fafc; }
+        .btn-ativo { background-color: #059669 !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2); }
+
+        /* Area Principal de Conteúdo */
+        main { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; background-color: #f8fafc; }
+        
+        header { 
+            background: #ffffff; 
+            border-bottom: 1px solid #e2e8f0; 
+            padding: 18px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            shrink: 0;
+        }
+        
+        header h2 { font-size: 20px; font-weight: 800; color: #0f172a; }
+        header p { font-size: 13px; color: #64748b; margin-top: 2px; }
+        
+        .header-status { display: flex; align-items: center; gap: 15px; }
+        .status-badge { background: #f1f5f9; border: 1px solid #e2e8f0; padding: 6px 12px; rounded-radius: 6px; font-size: 11px; font-weight: 700; color: #475569; display: flex; align-items: center; gap: 8px; border-radius: 6px; }
+        .status-dot { width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; display: inline-block; animation: pulse 1.8s infinite; }
+
+        .conteudo-container { padding: 30px; overflow-y: auto; flex: 1; }
+
+        /* Sistema de Abas */
+        .aba-conteudo { display: none !important; }
+        .aba-ativa { display: block !important; animation: fadeIn 0.3s ease-in-out; }
+
+        /* Grid de Cards KPIs */
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .card { background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02); border-left: 4px solid #cbd5e1; }
+        .card-verde { border-left-color: #10b981; }
+        .card-azul { border-left-color: #3b82f6; }
+        .card-roxo { border-left-color: #8b5cf6; }
+        .card-alerta { border-left-color: #f59e0b; }
+        .card-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; tracking-width: 0.5px; margin-bottom: 6px; }
+        .card-valor { font-size: 28px; font-weight: 800; color: #0f172a; }
+
+        /* Gráficos e Blocos de Decisão */
+        .grid-dashboard { display: grid; grid-template-columns: 20fr 11fr; gap: 20px; margin-bottom: 25px; }
+        @media (max-width: 1024px) { .grid-dashboard { grid-template-columns: 1fr; } }
+        
+        .painel-branco { background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .painel-titulo { font-size: 14px; font-weight: 700; uppercase; color: #475569; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .grafico-wrapper { position: relative; height: 300px; width: 100%; }
+
+        .card-ia { background: #064e3b; color: #ffffff; padding: 25px; border-radius: 12px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-ia h3 { color: #34d399; font-size: 14px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .card-ia p { font-size: 14px; line-height: 1.6; color: #e6f4ea; }
+
+        /* Formulários Customizados */
+        .form-box { max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .grid-cards { grid-template-columns: 1fr 1fr; } }
+        
+        .field-group { display: flex; flex-direction: column; gap: 4px; }
+        .field-group label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748b; }
+        .field-group input, .field-group select { padding: 10px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 14px; outline: none; transition: border 0.2s; }
+        .field-group input:focus, .field-group select:focus { border-color: #059669; background: #fff; }
+        .btn-submit { width: 100%; background-color: #0f172a; color: white; font-weight: 700; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; margin-top: 10px; transition: background 0.2s; }
+        .btn-submit:hover { background-color: #059669; }
+
+        /* Tabelas Corporativas */
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; background: white; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background-color: #f1f5f9; padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748b; border-bottom: 1px solid #e2e8f0; }
+        td { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+        tr:hover { background-color: #f8fafc; }
+
+        /* Aba Especial de Nutrição Recomendada */
+        .grid-nutricao { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card-racao { background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); display: flex; flex-direction: column; }
+        .racao-header { padding: 15px; font-weight: 800; font-size: 15px; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .rh-1 { background: #0369a1; } /* Azul */
+        .rh-2 { background: #b45309; } /* Ambar */
+        .rh-3 { background: #047857; } /* Verde */
+        .racao-body { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .racao-custo { font-size: 22px; font-weight: 900; color: #0f172a; border-top: 1px dashed #e2e8f0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .racao-custo span { font-size: 12px; color: #64748b; font-weight: 500; }
+
+        /* Estilos do Menu Mobile */
+        .mobile-bar { display: none; background: #020617; color: white; padding: 15px 20px; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; shrink: 0; }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            aside { display: none; width: 100%; height: auto; position: absolute; top: 55px; left: 0; bottom: 0; }
+            .mobile-bar { display: flex; }
+            .header-status { display: none; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-bar">
+        <h1 style="color: #34d399; font-size: 18px; font-weight: 800;">Pecuária 4.0</h1>
+        <button onclick="toggleMenuMobile()" style="background:none; border:none; color:white; cursor:pointer;"><i data-lucide="menu"></i></button>
+    </div>
+
+    <aside id="sidebar">
+        <div>
+            <div class="brand">
+                <h1>Pecuária 4.0</h1>
+                <p>MVP MODELO • MATRIZ UFGD</p>
+            </div>
+            <nav>
+                <a href="../Index.html" class="menu-btn" style="text-decoration:none;">
+                    <i data-lucide="arrow-left"></i>
+                         Voltar para Apresentação
+                </a>
+                <button onclick="alternarAba('dashboard')" id="btn-dashboard" class="menu-btn btn-ativo"><i data-lucide="layout-dashboard"></i> Painel Geral</button>
+                <button onclick="alternarAba('cadastro')" id="btn-cadastro" class="menu-btn"><i data-lucide="plus-circle"></i> Cadastrar Animal</button>
+                <button onclick="alternarAba('simulador')" id="btn-simulador" class="menu-btn"><i data-lucide="scan-face"></i> Coleta (Balança/RFID)</button>
+                <button onclick="alternarAba('calendario')" id="btn-calendario" class="menu-btn"><i data-lucide="calendar-clock"></i> Perfil & Calendário</button>
+                <button onclick="alternarAba('nutricao')" id="btn-nutricao" class="menu-btn"><i data-lucide="salad"></i> Nutrição Recomendada</button>
+                <button onclick="alternarAba('indices')" id="btn-indices" class="menu-btn"><i data-lucide="bar-chart-3"></i> Índices Zootécnicos</button>
+                <button onclick="alternarAba('financeiro')" id="btn-financeiro" class="menu-btn"><i data-lucide="dollar-sign"></i> Gestão Financeira</button>
+                <button onclick="alternarAba('biblioteca')" id="btn-biblioteca" class="menu-btn"><i data-lucide="library"></i> Biblioteca Nutricional</button>
+            </nav>
+        </div>
+        <div style="font-size: 11px; color: #475569; text-align: center; font-family: monospace; padding-top: 10px;">
+            Ambiente Seguro Compilado
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div>
+                <h2 id="titulo-pagina">Painel Analítico</h2>
+                <p id="subtitulo-pagina">Visão global do rebanho em tempo real.</p>
+            </div>
+            <div class="header-status">
+                <span style="font-size: 13px; font-weight: 500; color: #475569;">Arroba Média: <b style="color:#059669">R$ 235,00</b></span>
+                <div class="status-badge"><span class="status-dot"></span> MOTOR ATIVO</div>
+            </div>
+        </header>
+
+        <div class="conteudo-container">
+
+            <section id="aba-dashboard" class="aba-conteudo aba-ativa">
+                <div class="grid-cards">
+                    <div class="card card-verde">
+                        <p class="card-titulo">Total Rebanho</p>
+                        <p id="kpi-total" class="card-valor">0</p>
+                    </div>
+                    <div class="card card-azul">
+                        <p class="card-titulo">Peso Médio Rebanho</p>
+                        <p id="kpi-peso" class="card-valor">0 <span style="font-size:14px; color:#94a3b8; font-weight:normal;">kg</span></p>
+                    </div>
+                    <div class="card card-roxo">
+                        <p class="card-titulo">GMD Global</p>
+                        <p id="kpi-gmd" class="card-valor">0.00 <span style="font-size:14px; color:#94a3b8; font-weight:normal;">kg/d</span></p>
+                    </div>
+                    <div class="card card-alerta">
+                        <p class="card-titulo">Alertas Ativos</p>
+                        <p id="kpi-alertas" class="card-valor">0</p>
+                    </div>
+                </div>
+
+                <div class="grid-dashboard">
+                    <div class="painel-branco">
+                        <h3 class="painel-titulo"><i data-lucide="trending-up" style="width:16px; color:#10b981"></i> Curva de Evolução do Ganho de Peso Médio</h3>
+                        <div class="grafico-wrapper"><canvas id="graficoEvolucao"></canvas></div>
+                    </div>
+                    <div class="card-ia">
+                        <div>
+                            <h3><i data-lucide="brain"></i> Decisão Autônoma</h3>
+                            <p id="box-decisao">Processando variáveis matriciais do plantel...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="aba-cadastro" class="aba-conteudo">
+                <div class="form-box">
+                    <h3 class="painel-titulo" style="margin-bottom:20px;"><i data-lucide="tag" style="color:#059669"></i> Inclusão de Bovino no Banco de Dados</h3>
+                    <form id="form-cadastro" onsubmit="cadastrarAnimal(event)">
+                        <div class="form-grid">
+                            <div class="field-group"><label>RFID / Identificador Eletrônico</label><input type="text" id="cad-rfid" required placeholder="Ex: BR003"></div>
+                            <div class="field-group"><label>Raça</label>
+                                <select id="cad-raca"><option>Nelore</option><option>Angus</option><option>Cruzamento Industrial</option></select>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="field-group"><label>Genealogia (Pai)</label><input type="text" id="cad-pai" placeholder="Ex: REM Torixoréu"></div>
+                            <div class="field-group"><label>Genealogia (Mãe)</label><input type="text" id="cad-mae" placeholder="Ex: Matriz 42"></div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="field-group"><label>Peso Inicial de Entrada (kg)</label><input type="number" step="0.1" id="cad-peso" required placeholder="Ex: 210"></div>
+                            <div class="field-group"><label>Data de Entrada</label><input type="date" id="cad-data" required></div>
+                        </div>
+                        <button type="submit" class="btn-submit">Salvar Registro Zootécnico</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="aba-simulador" class="aba-conteudo">
+                <div class="form-box">
+                    <h3 class="painel-titulo" style="margin-bottom:20px;"><i data-lucide="cpu" style="color:#059669"></i> Captura de Campo Eletrônica (Hardware IoT)</h3>
+                    <form id="form-pesagem" onsubmit="processarPesagem(event)">
+                        <div class="form-grid">
+                            <div class="field-group"><label>Leitura RFID do Brinco</label><input type="text" id="form-rfid" required placeholder="Ex: BR001"></div>
+                            <div class="field-group"><label>Peso Estabilizado na Balança (kg)</label><input type="number" step="0.1" id="form-peso" required placeholder="Ex: 315.5"></div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="field-group"><label>Data do Evento</label><input type="date" id="form-data" required></div>
+                            <div class="field-group"><label>Lote / Piquete Destino</label><input type="text" id="form-lote" value="Lote Principal"></div>
+                        </div>
+                        <button type="submit" class="btn-submit" style="background-color:#059669;">Simular Passagem na Balança</button>
+                    </form>
+                </div>
+                <div id="resultado-analitico" class="form-box" style="margin-top:20px; display:none; border-left: 5px solid #10b981;"></div>
+            </section>
+
+            <section id="aba-calendario" class="aba-conteudo">
+                <div class="form-box" style="max-width:100%; display:flex; gap:15px; margin-bottom:20px;">
+                    <input type="text" id="busca-calendario" placeholder="Digite o RFID do animal (Ex: BR001)..." style="flex:1; padding:12px; border-radius:6px; border:1px solid #cbd5e1;">
+                    <button onclick="buscarPerfilAnimal()" class="btn-submit" style="margin:0; width:auto; padding:0 25px;">Buscar Ficha</button>
+                </div>
+                <div id="perfil-resultado" style="display:none;" class="grid-dashboard">
+                    <div class="painel-branco">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:15px; margin-bottom:15px;">
+                            <div>
+                                <h3 id="perf-rfid" style="font-size:24px; font-weight:900;">-</h3>
+                                <p id="perf-raca" style="color:#64748b; font-size:14px;">-</p>
+                            </div>
+                            <span id="perf-status" style="padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700;">-</span>
+                        </div>
+                        <div class="grid-cards" style="grid-template-columns:1fr 1fr 1fr; margin-bottom:15px;">
+                            <div class="card"><p class="card-titulo">Peso Atual</p><p id="perf-peso" style="font-size:18px; font-weight:700;">-</p></div>
+                            <div class="card"><p class="card-titulo">GMD Acumulado</p><p id="perf-gmd" style="font-size:18px; font-weight:700;">-</p></div>
+                            <div class="card"><p class="card-titulo">Fase Atual</p><p id="perf-fase" style="font-size:18px; font-weight:700;">-</p></div>
+                        </div>
+                        <p style="font-size:13px; color:#475569;"><b>Pai:</b> <span id="perf-pai"></span> | <b>Mãe:</b> <span id="perf-mae"></span></p>
+                    </div>
+                    <div class="painel-branco">
+                        <h4 class="painel-titulo"><i data-lucide="calendar"></i> Cronograma de Manejo Provedor</h4>
+                        <div style="display:flex; flex-direction:column; gap:15px; border-left:2px solid #e2e8f0; padding-left:15px; margin-left:10px; font-size:13px;">
+                            <div><p style="font-weight:700; color:#475569;">Entrada no Sistema</p><p id="perf-data-entrada" style="color:#94a3b8; font-size:12px;">-</p></div>
+                            <div><p style="font-weight:700; color:#2563eb;">Transição para Terminação (380kg)</p><p id="perf-data-terminacao" style="color:#94a3b8; font-size:12px;">-</p></div>
+                            <div><p style="font-weight:700; color:#059669;">Previsão de Abate Clínico (520kg)</p><p id="perf-data-abate" style="color:#94a3b8; font-size:12px;">-</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="aba-nutricao" class="aba-conteudo">
+                <div class="painel-branco" style="display:flex; gap:15px; margin-bottom:20px; align-items:center; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:250px;">
+                        <input type="text" id="busca-nutricao" placeholder="Pesquisar por RFID específico..." style="width:100%; padding:12px; border-radius:6px; border:1px solid #cbd5e1;">
+                    </div>
+                    <button onclick="calcularNutricao()" class="btn-submit" style="margin:0; width:auto; padding:0 25px; background-color:#059669;">Gerar Planejamento Nutricional</button>
+                    <button onclick="limparBuscaNutricao()" class="btn-submit" style="margin:0; width:auto; padding:0 20px; background-color:#64748b;">Ver Média Rebanho</button>
+                </div>
+
+                <div class="painel-branco" style="margin-bottom:20px; background:#f0fdf4; border:1px solid #bbf7d0;">
+                    <h4 style="font-size:15px; font-weight:800; color:#166534; display:flex; align-items:center; gap:8px;">
+                        <i data-lucide="info"></i> Diagnóstico Nutricional Base: <span id="nutri-alvo-txt" style="font-weight:normal; color:#1e293b;">Média Geral do Rebanho</span>
+                    </h4>
+                </div>
+
+                <div id="container-opcoes-racao" class="grid-nutricao">
+                    </div>
+            </section>
+
+            <section id="aba-indices" class="aba-conteudo">
+                <div class="grid-cards" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card card-azul"><p class="card-titulo">Conversão Alimentar Estimada</p><p class="card-valor">7.2 <span style="font-size:14px; font-weight:normal; color:#64748b;">: 1</span></p></div>
+                    <div class="card card-verde"><p class="card-titulo">Rendimento de Carcaça Projetado</p><p class="card-valor">54.5 <span style="font-size:14px; font-weight:normal; color:#64748b;">%</span></p></div>
+                    <div class="card card-roxo"><p class="card-titulo">Taxa de Lotação Global</p><p class="card-valor">2.8 <span style="font-size:14px; font-weight:normal; color:#64748b;">UA/ha</span></p></div>
+                </div>
+                <div class="painel-branco">
+                    <h3 class="painel-titulo">Desempenho Zootécnico por Fase</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Fase Produtiva</th><th>Indivíduos Ativos</th><th>Média de GMD Real</th><th>Meta de Ganho (Científica)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><b>Recria Estacional</b></td><td id="ind-recria-qtd">0</td><td id="ind-recria-gmd">0.0</td><td style="color:#059669; font-weight:700;">0.750 kg/dia</td></tr>
+                                <tr><td><b>Terminação Intensiva</b></td><td id="ind-term-qtd">0</td><td id="ind-term-gmd">0.0</td><td style="color:#059669; font-weight:700;">1.500 kg/dia</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="aba-financeiro" class="aba-conteudo">
+                <div class="grid-cards">
+                    <div class="card shadow-sm"><p class="card-titulo">Custo Diário Médio Cabeça</p><p class="card-valor" style="color:#b91c1c;">R$ 6,50</p></div>
+                    <div class="card shadow-sm"><p class="card-titulo">Custo por @ Produzida</p><p class="card-valor">R$ 185,40</p></div>
+                    <div class="card shadow-sm"><p class="card-titulo">Preço Venda Arroba (CEPEA)</p><p class="card-valor" style="color:#059669;">R$ 235,00</p></div>
+                    <div class="card shadow-sm"><p class="card-titulo">Margem Líquida Obtida / @</p><p class="card-valor" style="color:#10b981;">R$ 49,60</p></div>
+                </div>
+                <div class="painel-branco">
+                    <h3 class="painel-titulo">Análise do Fluxo Financeiro por Ciclo</h3>
+                    <div class="grafico-wrapper"><canvas id="graficoFinanceiro"></canvas></div>
+                </div>
+            </section>
+
+            <section id="aba-biblioteca" class="aba-conteudo">
+                <div class="painel-branco">
+                    <h3 class="painel-titulo">Matriz de Nutrientes de Alimentos Padronizados</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Ingrediente Padrão</th><th>Matéria Seca (MS %)</th><th>Proteína Bruta (PB %)</th><th>NDT (% da MS)</th><th>Validação Científica</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><b>Pasto (Braquiária Marandu)</b></td><td>25.0%</td><td>8.5%</td><td>55.0%</td><td>Embrapa Gado de Corte</td></tr>
+                                <tr><td><b>Silagem de Milho Moída</b></td><td>32.0%</td><td>7.5%</td><td>65.0%</td><td>UFV / Sistema Viçosa</td></tr>
+                                <tr><td><b>Milho Grão Moído</b></td><td>88.0%</td><td>9.0%</td><td>85.0%</td><td>BR-Corte 4.0</td></tr>
+                                <tr><td><b>Farelo de Soja (45%)</b></td><td>89.0%</td><td>45.0%</td><td>80.0%</td><td>BR-Corte 4.0</td></tr>
+                                <tr><td><b>Caroço de Algodão Integral</b></td><td>91.0%</td><td>23.0%</td><td>92.0%</td><td>NRC Beef 2016</td></tr>
+                                <tr><td><b>Ureia Pecuária</b></td><td>99.0%</td><td>281.0% (NNP)</td><td>0.0%</td><td>Constante Zootécnica</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // Banco de dados virtual persistente em memória
+        const db = {
+            animais: [
+                { rfid: 'BR001', raca: 'Nelore', pai: 'REM Torixoréu', mae: 'Matriz 14', entrada: '2025-01-10', pesos: [220, 248, 280, 312], datas: ['2025-01-10','2025-02-10','2025-03-10','2025-04-10'] },
+                { rfid: 'BR002', raca: 'Angus x Nelore', pai: 'TE Angus Prime', mae: 'Nelore Brava', entrada: '2025-01-10', pesos: [340, 385, 431], datas: ['2025-01-10','2025-02-10','2025-03-10'] }
+            ]
+        };
+
+        let activeCharts = { evolucao: null, financeiro: null };
+
+        window.onload = () => {
+            lucide.createIcons();
+            document.getElementById('form-data').value = new Date().toISOString().split('T')[0];
+            document.getElementById('cad-data').value = new Date().toISOString().split('T')[0];
+            processarLotesGerais();
+            calcularNutricao(); // Inicia com a ração padrão baseada no rebanho
+        };
+
+        function toggleMenuMobile() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.display = (sidebar.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function alternarAba(abaId) {
+            document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('aba-ativa'));
+            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('btn-ativo'));
+
+            document.getElementById(`aba-${abaId}`).classList.add('aba-ativa');
+            document.getElementById(`btn-${abaId}`).classList.add('btn-ativo');
+
+            const headers = {
+                'dashboard': ['Painel Analítico Geral', 'Métricas e controle em tempo real do plantel.'],
+                'cadastro': ['Cadastro de Animais', 'Inclusão de matrizes e novos bezerros no plantel.'],
+                'simulador': ['Captura Automática IoT', 'Simulador físico de passagem em balança pneumática e RFID.'],
+                'calendario': ['Perfil & Linha do Tempo', 'Análise histórica individualizada e previsão de abate.'],
+                'nutricao': ['Planejamento e Nutrição Recomendada', 'Formulações automáticas baseadas no ganho de peso diário.'],
+                'indices': ['Índices Zootécnicos Corporativos', 'Parâmetros quantitativos de eficiência produtiva.'],
+                'financeiro': ['Gestão Comercial & Financeira', 'Margem de lucro por @ e controle diário de custos.'],
+                'biblioteca': ['Biblioteca Nutricional', 'Tabela de insumos baseada nas referências do BR-Corte.']
+            };
+
+            document.getElementById('titulo-pagina').innerText = headers[abaId][0];
+            document.getElementById('subtitulo-pagina').innerText = headers[abaId][1];
+
+            if (window.innerWidth <= 768) document.getElementById('sidebar').style.display = 'none';
+            
+            processarLotesGerais();
+            if(abaId === 'nutricao') calcularNutricao();
+        }
+
+        function processarLotesGerais() {
+            let total = db.animais.length;
+            let totalPesos = 0, somaGmd = 0, alertas = 0;
+            let recriaQtd = 0, termQtd = 0, gmdRecria = 0, gmdTerm = 0;
+
+            db.animais.forEach(a => {
+                let pesoAtual = a.pesos[a.pesos.length - 1];
+                let pesoAnterior = a.pesos.length > 1 ? a.pesos[a.pesos.length - 2] : pesoAtual;
+                
+                let gmd = a.pesos.length > 1 ? (pesoAtual - pesoAnterior) / 30 : 0.85;
+                totalPesos += pesoAtual;
+                somaGmd += gmd;
+
+                if (gmd < 0.6) alertas++;
+                if (pesoAtual < 380) { recriaQtd++; gmdRecria += gmd; } else { termQtd++; gmdTerm += gmd; }
+            });
+
+            let pesoMedio = total ? (totalPesos / total) : 0;
+            let gmdMedio = total ? (somaGmd / total) : 0;
+
+            document.getElementById('kpi-total').innerText = total;
+            document.getElementById('kpi-peso').innerHTML = `${pesoMedio.toFixed(1)} <span style="font-size:14px; font-weight:normal; color:#94a3b8;">kg</span>`;
+            document.getElementById('kpi-gmd').innerHTML = `${gmdMedio.toFixed(2)} <span style="font-size:14px; font-weight:normal; color:#94a3b8;">kg/d</span>`;
+            document.getElementById('kpi-alertas').innerText = alertas;
+
+            document.getElementById('ind-recria-qtd').innerText = recriaQtd;
+            document.getElementById('ind-recria-gmd').innerText = recriaQtd ? (gmdRecria/recriaQtd).toFixed(3) : "0.000";
+            document.getElementById('ind-term-qtd').innerText = termQtd;
+            document.getElementById('ind-term-gmd').innerText = termQtd ? (gmdTerm/termQtd).toFixed(3) : "0.000";
+
+            let boxIA = document.getElementById('box-decisao');
+            if(gmdMedio < 0.8) {
+                boxIA.innerHTML = "<b>Recomendação Estratégica UFGD:</b> Desempenho geral abaixo do planejado. O motor identificou deficiência energética no pasto. Sugere-se transição imediata para o <i>Semiconfinamento Intensivo</i> com aumento de milho moído para reestabelecer o escore.";
+            } else {
+                boxIA.innerHTML = "<b>Recomendação Estratégica UFGD:</b> Plantel com excelente conversão biológica. A curva de crescimento está linear. Recomenda-se manter o lote rotacionado com suplementação de carcaça padrão.";
+            }
+
+            renderizarGraficos(pesoMedio);
+        }
+
+        function cadastrarAnimal(e) {
+            e.preventDefault();
+            const rfid = document.getElementById('cad-rfid').value;
+            if (db.animais.find(a => a.rfid === rfid)) return alert("Código RFID já existente!");
+
+            db.animais.push({
+                rfid: rfid,
+                raca: document.getElementById('cad-raca').value,
+                pai: document.getElementById('cad-pai').value || 'Desconhecido',
+                mae: document.getElementById('cad-mae').value || 'Desconhecida',
+                entrada: document.getElementById('cad-data').value,
+                pesos: [parseFloat(document.getElementById('cad-peso').value)],
+                datas: [document.getElementById('cad-data').value]
+            });
+
+            alert("Animal cadastrado com sucesso!");
+            document.getElementById('form-cadastro').reset();
+            processarLotesGerais();
+        }
+
+        function processarPesagem(e) {
+            e.preventDefault();
+            const rfid = document.getElementById('form-rfid').value;
+            const peso = parseFloat(document.getElementById('form-peso').value);
+            const data = document.getElementById('form-data').value;
+
+            let animal = db.animais.find(a => a.rfid === rfid);
+            if(!animal) return alert("Erro: Animal não localizado. Realize o cadastro prévio.");
+
+            let uPeso = animal.pesos[animal.pesos.length - 1];
+            let calculoGmd = ((peso - uPeso) / 30).toFixed(2);
+
+            animal.pesos.push(peso);
+            animal.datas.push(data);
+
+            const resBox = document.getElementById('resultado-analitico');
+            resBox.style.display = "block";
+            resBox.innerHTML = `
+                <h4 style="font-weight:800; font-size:14px; margin-bottom:10px; color:#0f172a;">Leitura Coletada com Sucesso</h4>
+                <p style="font-size:13px; line-height:1.5;">O animal <b>${rfid}</b> registrou <b>${peso} kg</b>. O ganho médio diário calculado em relação à última pesagem foi de <b style="color:#059669">${calculoGmd} kg/dia</b>.</p>
+            `;
+            document.getElementById('form-pesagem').reset();
+            processarLotesGerais();
+        }
+
+        function buscarPerfilAnimal() {
+            const rfid = document.getElementById('busca-calendario').value;
+            const animal = db.animais.find(a => a.rfid === rfid);
+            if(!animal) return alert("Animal não localizado no plantel ativo.");
+
+            let pesoAtual = animal.pesos[animal.pesos.length - 1];
+            let gmd = animal.pesos.length > 1 ? ((pesoAtual - animal.pesos[0]) / (animal.pesos.length * 30)).toFixed(2) : 0.85;
+
+            document.getElementById('perf-rfid').innerText = `BOVINO - ${animal.rfid}`;
+            document.getElementById('perf-raca').innerText = `${animal.raca} • Registro de Campo`;
+            document.getElementById('perf-peso').innerText = `${pesoAtual} kg`;
+            document.getElementById('perf-gmd').innerText = `${gmd} kg/dia`;
+            document.getElementById('perf-fase').innerText = pesoAtual < 380 ? 'Recria' : 'Terminação';
+            document.getElementById('perf-pai').innerText = animal.pai;
+            document.getElementById('perf-mae').innerText = animal.mae;
+            document.getElementById('perf-data-entrada').innerText = animal.entrada;
+
+            let badge = document.getElementById('perf-status');
+            badge.innerText = gmd < 0.6 ? "Sugerido Descarte" : "Alto Desempenho";
+            badge.style.backgroundColor = gmd < 0.6 ? "#fee2e2" : "#dcfce7";
+            badge.style.color = gmd < 0.6 ? "#991b1b" : "#166534";
+
+            let diasTermina = pesoAtual < 380 ? ((380 - pesoAtual) / gmd).toFixed(0) : 0;
+            let diasAbate = ((520 - pesoAtual) / gmd).toFixed(0);
+
+            document.getElementById('perf-data-terminacao').innerText = diasTermina > 0 ? `Aprox. ${diasTermina} dias para mudança` : 'Já na fase de terminação';
+            document.getElementById('perf-data-abate').innerText = diasAbate > 0 ? `Previsão em ${diasAbate} dias úteis` : 'Apto para o Gancho / Abate';
+
+            document.getElementById('perfil-resultado').style.display = "grid";
+        }
+
+        // 4. NOVO MOTOR NUTRICIONAL DINÂMICO (SOLICITADO)
+        function calcularNutricao() {
+            const rfidBusca = document.getElementById('busca-nutricao').value;
+            let animal = db.animais.find(a => a.rfid === rfidBusca);
+            let pesoAlvo = 0;
+
+            if(animal) {
+                pesoAlvo = animal.pesos[animal.pesos.length - 1];
+                document.getElementById('nutri-alvo-txt').innerHTML = `Animal Específico <b>${animal.rfid}</b> (${pesoAlvo} kg)`;
+            } else {
+                // Média Geral do Rebanho se não buscar específico
+                let totalPesos = 0;
+                db.animais.forEach(a => totalPesos += a.pesos[a.pesos.length - 1]);
+                pesoAlvo = db.animais.length ? (totalPesos / db.animais.length) : 350;
+                document.getElementById('nutri-alvo-txt').innerHTML = `Média de Todo o Plantel (<b>${pesoAlvo.toFixed(1)} kg</b>)`;
+            }
+
+            // Consumo de Matéria Seca Estimado (CMS) baseado em 2.3% do peso vivo
+            let cms = pesoAlvo * 0.023;
+
+            // DEFINIÇÃO DA FORMULAÇÃO DAS 3 OPÇÕES DE RAÇÃO E PREÇOS
+            // Preços cadastrados por kg de Matéria Seca (Insumos da Planilha):
+            const precos = { pasto: 0.15, silagem: 0.35, milho: 1.30, soja: 2.50, nucleo: 4.80 };
+
+            // Opção 1: Suplementação Proteica a Pasto (Foco Economia / Recria)
+            let o1_ing1 = cms * 0.88; // Pasto
+            let o1_ing2 = cms * 0.08; // Milho
+            let o1_ing3 = cms * 0.03; // Soja
+            let o1_ing4 = cms * 0.01; // Nucleo
+            let custo_o1 = (o1_ing1 * precos.pasto) + (o1_ing2 * precos.milho) + (o1_ing3 * precos.soja) + (o1_ing4 * precos.nucleo);
+
+            // Opção 2: Dieta de Semiconfinamento (Foco Equilíbrio / Crescimento)
+            let o2_ing1 = cms * 0.50; // Silagem
+            let o2_ing2 = cms * 0.35; // Milho
+            let o2_ing3 = cms * 0.12; // Soja
+            let o2_ing4 = cms * 0.03; // Nucleo
+            let custo_o2 = (o2_ing1 * precos.silagem) + (o2_ing2 * precos.milho) + (o2_ing3 * precos.soja) + (o2_ing4 * precos.nucleo);
+
+            // Opção 3: Confinamento Adensado de Alto Desempenho (Foco Terminação Intensiva)
+            let o3_ing1 = cms * 0.20; // Silagem
+            let o3_ing2 = cms * 0.58; // Milho
+            let o3_ing3 = cms * 0.18; // Soja
+            let o3_ing4 = cms * 0.04; // Nucleo
+            let custo_o3 = (o3_ing1 * precos.silagem) + (o3_ing2 * precos.milho) + (o3_ing3 * precos.soja) + (o3_ing4 * precos.nucleo);
+
+            const container = document.getElementById('container-opcoes-racao');
+            container.innerHTML = `
+                <div class="card-racao">
+                    <div class="racao-header rh-1"><span>OPÇÃO 1: Pasto + Suplemento</span><i data-lucide="sprout"></i></div>
+                    <div class="racao-body">
+                        <p style="font-size:12px; color:#64748b; margin-bottom:12px;">Indicado para ganho médio extensivo de custo reduzido.</p>
+                        <div style="font-size:13px; line-height:1.8;">
+                            • Pasto Marandu: <b>${o1_ing1.toFixed(2)} kg/dia</b> (R$ ${(o1_ing1 * precos.pasto).toFixed(2)})<br>
+                            • Milho Moído: <b>${o1_ing2.toFixed(2)} kg/dia</b> (R$ ${(o1_ing2 * precos.milho).toFixed(2)})<br>
+                            • Farelo de Soja: <b>${o1_ing3.toFixed(2)} kg/dia</b> (R$ ${(o1_ing3 * precos.soja).toFixed(2)})<br>
+                            • Núcleo Mineral: <b>${o1_ing4.toFixed(2)} kg/dia</b> (R$ ${(o1_ing4 * precos.nucleo).toFixed(2)})
+                        </div>
+                        <div class="racao-custo"><span>Total Diário / Animal</span>R$ ${custo_o1.toFixed(2)}</div>
+                    </div>
+                </div>
+
+                <div class="card-racao">
+                    <div class="racao-header rh-2"><span>OPÇÃO 2: Semiconfinamento</span><i data-lucide="scale"></i></div>
+                    <div class="racao-body">
+                        <p style="font-size:12px; color:#64748b; margin-bottom:12px;">Relação volumoso:concentrado otimizada para transição acelerada.</p>
+                        <div style="font-size:13px; line-height:1.8;">
+                            • Silagem de Milho: <b>${o2_ing1.toFixed(2)} kg/dia</b> (R$ ${(o2_ing1 * precos.silagem).toFixed(2)})<br>
+                            • Milho Moído: <b>${o2_ing2.toFixed(2)} kg/dia</b> (R$ ${(o2_ing2 * precos.milho).toFixed(2)})<br>
+                            • Farelo de Soja: <b>${o2_ing3.toFixed(2)} kg/dia</b> (R$ ${(o2_ing3 * precos.soja).toFixed(2)})<br>
+                            • Núcleo Mineral: <b>${o2_ing4.toFixed(2)} kg/dia</b> (R$ ${(o2_ing4 * precos.nucleo).toFixed(2)})
+                        </div>
+                        <div class="racao-custo"><span>Total Diário / Animal</span>R$ ${custo_o2.toFixed(2)}</div>
+                    </div>
+                </div>
+
+                <div class="card-racao">
+                    <div class="racao-header rh-3"><span>OPÇÃO 3: Confinamento Total</span><i data-lucide="zap"></i></div>
+                    <div class="racao-body">
+                        <p style="font-size:12px; color:#64748b; margin-bottom:12px;">Dieta adensada (Sistema Viçosa) para deposição máxima de gordura.</p>
+                        <div style="font-size:13px; line-height:1.8;">
+                            • Silagem de Milho: <b>${o3_ing1.toFixed(2)} kg/dia</b> (R$ ${(o3_ing1 * precos.silagem).toFixed(2)})<br>
+                            • Milho Moído: <b>${o3_ing2.toFixed(2)} kg/dia</b> (R$ ${(o3_ing2 * precos.milho).toFixed(2)})<br>
+                            • Farelo de Soja: <b>${o3_ing3.toFixed(2)} kg/dia</b> (R$ ${(o3_ing3 * precos.soja).toFixed(2)})<br>
+                            • Núcleo Cocho: <b>${o3_ing4.toFixed(2)} kg/dia</b> (R$ ${(o3_ing4 * precos.nucleo).toFixed(2)})
+                        </div>
+                        <div class="racao-custo"><span>Total Diário / Animal</span>R$ ${custo_o3.toFixed(2)}</div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function limparBuscaNutricao() {
+            document.getElementById('busca-nutricao').value = '';
+            calcularNutricao();
+        }
+
+        // 5. RENDERIZADOR CORPORATIVO DE GRÁFICOS CHART.JS
+        function renderizarGraficos(pMedio) {
+            try {
+                const ctxEv = document.getElementById('graficoEvolucao').getContext('2d');
+                if(activeCharts.evolucao) activeCharts.evolucao.destroy();
+                activeCharts.evolucao = new Chart(ctxEv, {
+                    type: 'line',
+                    data: {
+                        labels: ['Entrada', 'Pesagem 2', 'Pesagem 3', 'Atual'],
+                        datasets: [{
+                            label: 'Evolução de Carcaça (kg)',
+                            data: [pMedio - 65, pMedio - 35, pMedio - 12, pMedio],
+                            borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                            borderWidth: 3, fill: true, tension: 0.35
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+
+                const ctxFin = document.getElementById('graficoFinanceiro').getContext('2d');
+                if(activeCharts.financeiro) activeCharts.financeiro.destroy();
+                activeCharts.financeiro = new Chart(ctxFin, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Insumos Recria', 'Suplementação', 'Operacional', 'Receita do Lote'],
+                        datasets: [
+                            { label: 'Desembolso Real (R$)', data: [450, 680, 210, 0], backgroundColor: '#ef4444' },
+                            { label: 'Faturamento Projetado (R$)', data: [0, 0, 0, 4800], backgroundColor: '#10b981' }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            } catch(err) { console.log("Engine gráfico aguardando mapeamento estrutural."); }
+        }
+    </script>
+</body>
+</html>
